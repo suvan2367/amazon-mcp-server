@@ -1,0 +1,79 @@
+{
+  "name": "cloud-amazon-seller-mcp-server",
+  "version": "1.0.0",
+  "description": "Cloud-deployed Amazon Seller MCP Server with autoscaling",
+  "main": "build/index.js",
+  "type": "module",
+  "scripts": {
+    "build": "tsc",
+    "start": "node build/index.js",
+    "dev": "tsx watch src/index.ts",
+    "test": "jest",
+    "lint": "eslint src/**/*.ts",
+    "security-audit": "npm audit",
+    "docker:build": "docker build -t amazon-seller-mcp-server .",
+    "docker:run": "docker run -p 9094:9094 --env-file .env amazon-seller-mcp-server",
+    "docker:push": "docker tag amazon-seller-mcp-server:latest $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/amazon-seller-mcp-server:latest && docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/amazon-seller-mcp-server:latest",
+    "deploy:aws": "aws cloudformation deploy --template-file aws/cloudformation.yaml --stack-name amazon-seller-mcp-server --capabilities CAPABILITY_IAM",
+    "deploy:azure": "az deployment group create --resource-group amazon-seller-mcp-rg --template-file azure/main.bicep",
+    "deploy:terraform": "cd terraform && terraform init && terraform plan && terraform apply",
+    "health-check": "curl -f http://localhost:9094/health || exit 1"
+  },
+  "keywords": [
+    "mcp",
+    "amazon",
+    "seller",
+    "marketplace",
+    "ecommerce",
+    "claude",
+    "cloud",
+    "serverless",
+    "autoscale",
+    "sp-api"
+  ],
+  "author": "Your Name",
+  "license": "MIT",
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.17.4",
+    "compression": "^1.7.4",
+    "cors": "^2.8.5",
+    "crypto": "^1.0.1",
+    "dotenv": "^16.3.1",
+    "express": "^4.21.2",
+    "express-rate-limit": "^7.5.1",
+    "express-winston": "^4.2.0",
+    "helmet": "^7.2.0",
+    "http-proxy-middleware": "^2.0.6",
+    "isomorphic-fetch": "^3.0.0",
+    "querystring": "^0.2.1",
+    "redis": "^4.7.1",
+    "winston": "^3.11.0"
+  },
+  "devDependencies": {
+    "@types/compression": "^1.7.5",
+    "@types/cors": "^2.8.17",
+    "@types/express": "^4.17.21",
+    "@types/isomorphic-fetch": "^0.0.36",
+    "@types/jest": "^29.5.8",
+    "@types/node": "^20.19.17",
+    "@typescript-eslint/eslint-plugin": "^6.12.0",
+    "@typescript-eslint/parser": "^6.12.0",
+    "eslint": "^8.54.0",
+    "jest": "^29.7.0",
+    "nodemon": "^3.0.1",
+    "ts-jest": "^29.1.1",
+    "tsx": "^4.6.0",
+    "typescript": "^5.3.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/your-username/cloud-amazon-seller-mcp-server.git"
+  },
+  "homepage": "https://github.com/your-username/cloud-amazon-seller-mcp-server#readme",
+  "bugs": {
+    "url": "https://github.com/your-username/cloud-amazon-seller-mcp-server/issues"
+  }
+}
