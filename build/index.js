@@ -34,10 +34,10 @@ class CloudAmazonSellerMCPServer {
                 console.error('Redis Client Error', err);
             });
             await this.redis.connect();
-            console.log('Connected to Redis for token storage');
+            console.error('Connected to Redis for token storage');
         }
         else {
-            console.log('No Redis URL provided, using in-memory token storage');
+            console.error('No Redis URL provided, using in-memory token storage');
         }
     }
     setupExpress() {
@@ -1109,7 +1109,7 @@ class CloudAmazonSellerMCPServer {
         const port = process.env.PORT || 9094;
         // Setup MCP endpoints
         this.app.get('/mcp', (req, res) => {
-            console.log('MCP connection established via HTTP');
+            console.error('MCP connection established via HTTP');
             // Set CORS headers for MCP protocol
             res.setHeader('Access-Control-Allow-Origin', '*');
             res.setHeader('Access-Control-Allow-Headers', 'Cache-Control, Content-Type');
@@ -1166,20 +1166,20 @@ class CloudAmazonSellerMCPServer {
         });
         // Start HTTP server
         this.app.listen(port, () => {
-            console.log(`Cloud Amazon Seller MCP Server running on port ${port}`);
-            console.log(`Environment: ${process.env.NODE_ENV || 'development'}`);
-            console.log(`MCP endpoint: http://localhost:${port}/mcp`);
+            console.error(`Cloud Amazon Seller MCP Server running on port ${port}`);
+            console.error(`Environment: ${process.env.NODE_ENV || 'development'}`);
+            console.error(`MCP endpoint: http://localhost:${port}/mcp`);
         });
         // Graceful shutdown
         process.on('SIGTERM', async () => {
-            console.log('SIGTERM received, shutting down gracefully');
+            console.error('SIGTERM received, shutting down gracefully');
             if (this.redis) {
                 await this.redis.disconnect();
             }
             process.exit(0);
         });
         process.on('SIGINT', async () => {
-            console.log('SIGINT received, shutting down gracefully');
+            console.error('SIGINT received, shutting down gracefully');
             if (this.redis) {
                 await this.redis.disconnect();
             }
